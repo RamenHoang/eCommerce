@@ -1,0 +1,239 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% load store_extra %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg">
+            <div class="box-element">
+                <a class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+                <hr>
+                <h3>Order Summary</h3>
+                <hr>
+                <div class="cart-row">
+                    <div style="flex:2"></div>
+                    <div style="flex:2"><p>Item</p></div>
+                    <div style="flex:1"><p>Price</p></div>
+                    <div style="flex:1"><p>Quantity</p></div>
+                </div>
+                {% for item in items %}
+                    <div class="cart-row">
+                        <div style="flex:2"><img class="row-image" src="{{ item.content_object.product_ptr.imageURL }}">
+                        </div>
+                        <div style="flex:2"><p>{{ item.content_object.product_ptr.name }}</p></div>
+                        <div style="flex:1"><p>{{ item.content_object.product_ptr.price|floatformat:0|format_vnd }}</p>
+                        </div>
+                        <div style="flex:1"><p>x{{ item.quantity }}</p></div>
+                    </div>
+                {% endfor %}
+                <div>Items: {{ cart.cart_items_quantity }}</div>
+                <div>Total: {{ cart.cart_sub_total|add:order.order_shipping_cost|floatformat:0|format_vnd }} </div>
+                <div>Sub Total: {{ cart.cart_sub_total|floatformat:0|format_vnd }}</div>
+                <div>Shipment: {{ order.shipment.name }}</div>
+                <div>Shipping Cost: {{ order.order_shipping_cost|floatformat:0|format_vnd }}</div>
+
+                <hr>
+                <h3>Ship to address</h3>
+                <hr>
+                <div>No House: {{ user.address.no_house }}</div>
+                <div>Street: {{ user.address.street }} </div>
+                <div>City: {{ user.address.city }}</div>
+                <div>State: {{ user.address.state }}</div>
+                <div>Zipcode: {{ user.address.zipcode }}</div>
+            </div>
+            <br>
+            <form action="{% url 'checkout' %}" method="post">
+                {% csrf_token %}
+                <div class="box-element">
+                    <h3>Select payment</h3>
+                    <hr>
+                    <div class="form-group">
+                        {% for payment in payments %}
+                            <div class="form-field">
+                                <input type="radio" name="payment_id" id="id_payment_{{ payment.id }}"
+                                       class="payment-radio"
+                                       value="{{ payment.id }}"
+                                        {% if payment.id == selected_payment.id %} checked
+                                        {% elif forloop.counter == 1 %} checked
+                                        {% endif %}
+                                >
+                                <label for="id_payment_{{ payment.id }}">{{ payment.name }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if selected_payment.type == 'card' %}
+                        <label for="id_card_number">Card number</label>
+                        <input type="text" name="card_number" id="id_card_number" class="form-control" required>
+                        <label for="id_name_on_card">Name on card</label>
+                        <input type="text" name="name_on_card" id="id_name_on_card" class="form-control"
+                               required>
+                        <label for="id_expiry_date">Expiry date</label>
+                        <input type="text" name="expiry_date" id="id_expiry_date" class="form-control" required
+                               placeholder="MM/YY">
+                        <label for="id_security_code">Security code</label>
+                        <input type="password" name="security_code" id="id_security_code" class="form-control"
+                               required>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-primary">Place order</button>
+            </form>
+
+        </div>
+    </div>
+
+    {#    <script src="https://www.paypal.com/sdk/js?client-id=AX-VrJu4eVcZgosPFC05U3X6XhpsOyfGU-M3TmlAXB6f4Z6Di6VZIHzMseRlKX3dWyuKn8dFJzTvnnP4&currency=USD&disable-funding=credit"></script>#}
+
+    {#    <script>#}
+    {#        var total = '{{order.get_cart_total}}'#}
+    {#        // Render the PayPal button into #paypal-button-container#}
+    {#        paypal.Buttons({#}
+    {##}
+    {#            style: {#}
+    {#                color: 'blue',#}
+    {#                shape: 'rect',#}
+    {#            },#}
+    {##}
+    {#            // Set up the transaction#}
+    {#            createOrder: function (data, actions) {#}
+    {#                return actions.order.create({#}
+    {#                    purchase_units: [{#}
+    {#                        amount: {#}
+    {#                            value: parseFloat(total).toFixed(2)#}
+    {#                        }#}
+    {#                    }]#}
+    {#                });#}
+    {#            },#}
+    {##}
+    {#            // Finalize the transaction#}
+    {#            onApprove: function (data, actions) {#}
+    {#                return actions.order.capture().then(function (details) {#}
+    {#                    // Show a success message to the buyer#}
+    {#                    submitFormData()#}
+    {#                });#}
+    {#            }#}
+    {##}
+    {#        }).render('#paypal-button-container');#}
+    {#    </script>#}
+
+    {#    <script type="text/javascript">#}
+    {#        var shipping = '{{order.shipping}}'#}
+    {##}
+    {#        if (shipping == 'False') {#}
+    {#            document.getElementById('shipping-info').innerHTML = ''#}
+    {#        }#}
+    {##}
+    {#        if (user != 'AnonymousUser') {#}
+    {#            document.getElementById('user-info').innerHTML = ''#}
+    {#        }#}
+    {##}
+    {#        if (shipping == 'False' && user != 'AnonymousUser') {#}
+    {#            //Hide entire form if user is logged in and shipping is false#}
+    {#            document.getElementById('form-wrapper').classList.add("hidden");#}
+    {#            //Show payment if logged in user wants to buy an item that does not require shipping#}
+    {#            document.getElementById('payment-info').classList.remove("hidden");#}
+    {#        }#}
+    {##}
+    {#        var form = document.getElementById('form')#}
+    {#        form.addEventListener('submit', function (e) {#}
+    {#            e.preventDefault()#}
+    {#            console.log('Form Submitted...')#}
+    {#            document.getElementById('form-button').classList.add("hidden");#}
+    {#            document.getElementById('payment-info').classList.remove("hidden");#}
+    {#        })#}
+    {##}
+    {##}
+    {#        /*document.getElementById('make-payment').addEventListener('click', function(e){#}
+    {#            submitFormData()#}
+    {#        })*/#}
+    {##}
+    {##}
+    {#        function submitFormData() {#}
+    {#            console.log('Payment button clicked')#}
+    {##}
+    {#            var userFormData = {#}
+    {#                'name': null,#}
+    {#                'email': null,#}
+    {#                'total': total,#}
+    {#            }#}
+    {##}
+    {#            var shippingInfo = {#}
+    {#                'address': null,#}
+    {#                'city': null,#}
+    {#                'state': null,#}
+    {#                'zipcode': null,#}
+    {#            }#}
+    {##}
+    {#            if (shipping != 'False') {#}
+    {#                shippingInfo.address = form.address.value#}
+    {#                shippingInfo.city = form.city.value#}
+    {#                shippingInfo.state = form.state.value#}
+    {#                shippingInfo.zipcode = form.zipcode.value#}
+    {#            }#}
+    {##}
+    {#            if (user == 'AnonymousUser') {#}
+    {#                userFormData.name = form.name.value#}
+    {#                userFormData.email = form.email.value#}
+    {#            }#}
+    {##}
+    {#            console.log('Shipping Info:', shippingInfo)#}
+    {#            console.log('User Info:', userFormData)#}
+    {##}
+    {#            var url = "/process_order/"#}
+    {#            fetch(url, {#}
+    {#                method: 'POST',#}
+    {#                headers: {#}
+    {#                    'Content-Type': 'applicaiton/json',#}
+    {#                    'X-CSRFToken': csrftoken,#}
+    {#                },#}
+    {#                body: JSON.stringify({'form': userFormData, 'shipping': shippingInfo}),#}
+    {##}
+    {#            })#}
+    {#                .then((response) => response.json())#}
+    {#                .then((data) => {#}
+    {#                    console.log('Success:', data);#}
+    {#                    alert('Transaction completed');#}
+    {##}
+    {#                    cart = {}#}
+    {#                    document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"#}
+    {##}
+    {#                    window.location.href = "{% url 'store' %}"#}
+    {##}
+    {#                })#}
+    {#        }#}
+    {#    </script>#}
+
+    <script type="text/javascript">
+        const shipmentRadios = document.querySelectorAll('.shipment-radio');
+        let selectedShipmentId = "";
+        shipmentRadios.forEach(radio => {
+            if (radio.checked) {
+                selectedShipmentId = radio.value;
+            }
+        })
+        const paymentRadios = document.querySelectorAll('.payment-radio');
+        let selectedPaymentId = "";
+        paymentRadios.forEach(radio => {
+            if (radio.checked) {
+                selectedPaymentId = radio.value;
+            }
+        })
+
+        shipmentRadios.forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                selectedShipmentId = event.target.value;
+                updateUrl();
+            });
+        });
+
+        paymentRadios.forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                selectedPaymentId = event.target.value;
+                updateUrl();
+            });
+        });
+
+        function updateUrl() {
+            const baseUrl = "{% url 'checkout' %}";
+            window.location.href = `${baseUrl}?payment_id=${selectedPaymentId}&shipment_id=${selectedShipmentId}`;
+        }
+    </script>
+{% endblock content %}

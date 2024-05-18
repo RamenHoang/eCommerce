@@ -1,0 +1,29 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% load store_extra %}
+{% block content %}
+    <div class="row">
+        {% for product in products %}
+            <div class="col-lg-4">
+                <div class="box-element">
+                    <div class="col-lg-12" style="text-align: center">
+                        <img class="thumbnail" src="{{ product.imageURL }}">
+                    </div>
+                    <div class="product">
+                        <h6><strong>{{ product.name }}</strong></h6>
+                        <hr>
+                        <button data-product={{ product.id }} data-action="add"
+                                class="btn btn-outline-secondary add-btn update-cart">Add to Cart
+                        </button>
+                        <a class="btn btn-outline-primary" href="{% url 'product' product.id %}">View</a>
+                        <h5 style="display: inline-block; float: right">
+                            <strong>{{ product.price|floatformat:0|format_vnd }}</strong>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <h2 style="margin: auto">No products found!</h2>
+        {% endfor product in products %}
+    </div>
+{% endblock content %}

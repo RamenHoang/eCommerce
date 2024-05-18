@@ -1,0 +1,29 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% load store_extra %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg">
+            <div class="box-element">
+                <h3>My Orders</h3>
+                <hr>
+                <div class="cart-row">
+                    <div style="flex:2">Order ID</div>
+                    <div style="flex:2"><p>Order Date</p></div>
+                    <div style="flex:2"><p>Order Complete</p></div>
+                    <div style="flex:2"><p>Order Total</p></div>
+                    <div style="flex:2"><p>View Order</p></div>
+                </div>
+                {% for order in orders %}
+                    <div class="cart-row">
+                        <div style="flex:2">#{{ order.id }}</div>
+                        <div style="flex:2">{{ order.date_order }}</div>
+                        <div style="flex:2">{{ order.complete }}</div>
+                        <div style="flex:2">{{ order.total|floatformat:0|format_vnd }}</div>
+                        <div style="flex:2"><a href="{% url 'order_detail' order.id %}">View</a></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

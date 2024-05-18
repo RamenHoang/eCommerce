@@ -1,0 +1,63 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+    <div class="row justify-content-lg-center">
+        <div class="col-lg-8">
+            <h2>Register</h2>
+            <form action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="id_username">Username</label>
+                            <input type="text" name="username" id="id_username" class="form-control" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="id_password">Password</label>
+                            <input type="password" name="password" id="id_password" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="id_firstname">Firstname</label>
+                            <input type="text" name="firstname" id="id_firstname" class="form-control" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="id_lastname">Lastname</label>
+                            <input type="text" name="lastname" id="id_lastname" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="id_email">Email</label>
+                            <input type="email" name="email" id="id_email" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <label for="id_no_house">No House</label>
+                            <input type="text" name="no_house" id="id_no_house" class="form-control" required>
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="id_street">Street</label>
+                            <input type="text" name="street" id="id_street" class="form-control" required>
+                        </div>
+                        <div class="col-lg-2">
+                            <label for="id_city">City</label>
+                            <input type="text" name="city" id="id_city" class="form-control" required>
+                        </div>
+                        <div class="col-lg-2">
+                            <label for="id_state">State</label>
+                            <input type="text" name="state" id="id_state" class="form-control" required>
+                        </div>
+                        <div class="col-lg-2">
+                            <label for="id_zipcode">Zipcode</label>
+                            <input type="text" name="zipcode" id="id_zipcode" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Register</button>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
