@@ -8,6 +8,7 @@ from store.utils import cartData
 
 # Create your views here.
 
+
 def product(request, id):
     if request.method == 'GET':
         data = cartData(request)
@@ -35,7 +36,8 @@ def product(request, id):
 
         if request.user.is_authenticated:
             reviews = product.review_set.all().exclude(user=request.user.user_set.get())
-            my_review = product.review_set.filter(user=request.user.user_set.get()).first()
+            my_review = product.review_set.filter(
+                user=request.user.user_set.get()).first()
         else:
             reviews = product.review_set.all()
             my_review = None

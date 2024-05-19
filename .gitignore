@@ -156,3 +156,6 @@ Thumbs.db
 
 .idea
 .idea/*
+
+.vscode
+.vscode/*

@@ -30,7 +30,8 @@ def shipment(request):
         return render(request, 'store/shipment.html', context)
     elif request.method == 'POST':
         request_data = request.POST.dict()
-        order.shipment = Shipment.objects.get(id=request_data.get('shipment_id'))
+        order.shipment = Shipment.objects.get(
+            id=request_data.get('shipment_id'))
         order.save()
 
         return redirect('checkout')

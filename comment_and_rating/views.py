@@ -18,7 +18,8 @@ def review(request):
         rating = data.get('rating')
         comment = data.get('comment')
 
-        review, created = Review.objects.get_or_create(product=product, user=user)
+        review, created = Review.objects.get_or_create(
+            product=product, user=user)
         review.rating = rating
         review.comment = comment
         review.save()

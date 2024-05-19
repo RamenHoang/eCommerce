@@ -31,9 +31,12 @@ class Address(models.Model):
 
 
 class User(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)
-    fullname = models.ForeignKey(Fullname, on_delete=models.SET_NULL, null=True, blank=True)
-    address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
+    account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, null=True, blank=True)
+    fullname = models.ForeignKey(
+        Fullname, on_delete=models.SET_NULL, null=True, blank=True)
+    address = models.ForeignKey(
+        Address, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.fullname.__str__()

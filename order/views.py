@@ -21,7 +21,8 @@ def checkout(request):
         cart = order_data['cart']
         items = order_data['items']
 
-        order, created = Order.objects.get_or_create(user=request.user.user_set.get(), complete=False)
+        order, created = Order.objects.get_or_create(
+            user=request.user.user_set.get(), complete=False)
 
         payments = Payment.objects.all()
 

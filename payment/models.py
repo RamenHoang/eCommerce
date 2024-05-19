@@ -8,9 +8,11 @@ PAYMENT_TYPES = [
     ('cod', 'Cash on Delivery'),
 ]
 
+
 class Payment(models.Model):
     name = models.CharField(max_length=200, null=True)
-    type = models.CharField(max_length=200, choices=PAYMENT_TYPES, default='card')
+    type = models.CharField(
+        max_length=200, choices=PAYMENT_TYPES, default='card')
 
     def __str__(self):
         return self.name

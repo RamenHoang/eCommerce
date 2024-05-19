@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Shipment(models.Model):
     name = models.CharField(max_length=200, null=True)
     cost = models.FloatField(default=0)

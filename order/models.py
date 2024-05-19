@@ -10,17 +10,20 @@ from shipment.models import Shipment
 
 # Create your models here.
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True)
     date_order = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False, null=True, blank=True)
     transaction_id = models.CharField(max_length=200, null=True)
-    address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
-    payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, null=True, blank=True)
-    shipment = models.ForeignKey(Shipment, on_delete=models.SET_NULL, null=True, blank=True)
+    address = models.ForeignKey(
+        Address, on_delete=models.SET_NULL, null=True, blank=True)
+    payment = models.ForeignKey(
+        Payment, on_delete=models.SET_NULL, null=True, blank=True)
+    shipment = models.ForeignKey(
+        Shipment, on_delete=models.SET_NULL, null=True, blank=True)
     total = models.FloatField(default=0)
     subtotal = models.FloatField(default=0)
     shipping_cost = models.FloatField(default=0)
-
 
     def __str__(self):
         return str(self.id)
