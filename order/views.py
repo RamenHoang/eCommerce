@@ -14,15 +14,21 @@ def checkout(request):
     if not check_authenticate(request):
         return redirect('login')
 
+    cart_data = cartData(request)
+    if cart_data['cartItems'] == 0:
+        return redirect('store')
+
     if request.method == 'GET':
-        order_data = cartData(request)
         request_data = request.GET.dict()
-        cartItems = order_data['cartItems']
-        cart = order_data['cart']
-        items = order_data['items']
+        cartItems = cart_data['cartItems']
+        cart = cart_data['cart']
+        items = cart_data['items']
 
         order, created = Order.objects.get_or_create(
             user=request.user.user_set.get(), complete=False)
+
+        if order.shipment is None:
+            return redirect('shipment')
 
         payments = Payment.objects.all()
 
@@ -68,9 +74,8 @@ def checkout(request):
 
             return redirect('checkout')
 
-        order_data = cartData(request)
-        cart = order_data['cart']
-        items = order_data['items']
+        cart = cart_data['cart']
+        items = cart_data['items']
 
         for item in items:
             OrderItem.objects.create(
@@ -92,8 +97,9 @@ def checkout(request):
 def order_detail(request, id):
     if not check_authenticate(request):
         return redirect('login')
-    data = cartData(request)
-    cartItems = data['cartItems']
+
+    cart_data = cartData(request)
+    cartItems = cart_data['cartItems']
     if request.method == 'GET':
         order = Order.objects.get(id=id)
 
@@ -108,8 +114,9 @@ def order_detail(request, id):
 def orders(request):
     if not check_authenticate(request):
         return redirect('login')
-    data = cartData(request)
-    cartItems = data['cartItems']
+
+    cart_data = cartData(request)
+    cartItems = cart_data['cartItems']
     user = request.user.user_set.get()
     orders = Order.objects.filter(user=user, complete=True).order_by('-id')
 

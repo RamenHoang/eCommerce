@@ -8,14 +8,14 @@
                 <h3>ID: #{{ order.id }} - Order Detail</h3>
                 <hr>
                 <div class="cart-row">
-                    <div style="flex:2">Image</div>
-                    <div style="flex:2"><p>Product name</p></div>
-                    <div style="flex:1"><p>Product price</p></div>
+                    <div style="flex:1"></div>
+                    <div style="flex:2"><p>Item</p></div>
+                    <div style="flex:1"><p>Price</p></div>
                     <div style="flex:1"><p>Quantity</p></div>
                 </div>
                 {% for item in order.orderitem_set.all %}
                     <div class="cart-row">
-                        <div style="flex:2"><img class="row-image" src="{{ item.content_object.product_ptr.imageURL }}">
+                        <div style="flex:1"><img class="row-image" src="{{ item.content_object.product_ptr.imageURL }}">
                         </div>
                         <div style="flex:2"><p>{{ item.content_object.product_ptr.name }}</p></div>
                         <div style="flex:1"><p>{{ item.content_object.product_ptr.price|floatformat:0|format_vnd }}</p>
@@ -28,13 +28,20 @@
                 <div>Sub Total: {{ order.subtotal|floatformat:0|format_vnd }}</div>
                 <div>Shipment: {{ order.shipment.name }}</div>
                 <div>Shipping Cost: {{ order.shipping_cost|floatformat:0|format_vnd }}</div>
-
-                <hr>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="box-element">
                 <h3>Payment</h3>
                 <hr>
                 <div>Name: {{ order.payment.name }}</div>
-
-                <hr>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="box-element">
                 <h3>Ship to address</h3>
                 <hr>
                 <div>No House: {{ user.address.no_house }}</div>

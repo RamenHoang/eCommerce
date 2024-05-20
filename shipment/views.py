@@ -11,7 +11,11 @@ def shipment(request):
     if not check_authenticate(request):
         return redirect('login')
 
-    order_data = cartData(request)
+    cart_data = cartData(request)
+
+    if cart_data['cartItems'] == 0:
+        return redirect('store')
+
     user = request.user.user_set.get()
     order, created = Order.objects.get_or_create(user=user, complete=False)
 
@@ -25,7 +29,7 @@ def shipment(request):
         context = {
             'shipments': shipments,
             'selected_shipment': selected_shipment,
-            'cartItems': order_data['cartItems'],
+            'cartItems': cart_data['cartItems'],
         }
         return render(request, 'store/shipment.html', context)
     elif request.method == 'POST':
